@@ -23,7 +23,8 @@ const Form=styled.form`
     grid-template-columns: 1fr 3fr;
 
     header,
-    input[type="submit"]{
+    input[type="submit"],
+    span {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -43,7 +44,19 @@ const Form=styled.form`
     }
     label[for="password"]{
         height: auto;
-        grid-row: ${props=>props.login ? "4/5" : "5/7" };
+        grid-row: ${props=>props.join ? "5/7" : "4/5" };
+    }
+    label[for="password"],
+    input[name="password"],
+    input[name="password2"] {
+        opacity: ${props=>props.errorCode===100 ? "0.5" : "initial"};
+        font-weight: ${props=>props.errorCode===100 ? "600" : "initial"};
+
+        color: ${props=>props.errorCode===100 ? "rgba(248, 205, 220, 1)" : "initial"};
+        background-color: ${props=>props.errorCode===100 ? "rgba(196, 69, 105,1)" : "initial"};
+        &::placeholder{
+            color: ${props=>props.errorCode===100 ? "rgba(248, 205, 220, 1)" : "initial"};
+        }
     }
     input {
         border: 1px solid black;
@@ -60,8 +73,9 @@ const Form=styled.form`
     select,
     label,
     input,
-    button {
-        transition: all 0.2s ease-in-out;
+    button,
+    span {
+        transition: all 0.25s ease-in;
         height: 30px;
         &:hover,
         &:focus{
@@ -79,55 +93,60 @@ const Form=styled.form`
         width: 450px;
     }
 `;
-const AccountPresenter=({ login, error, loading, handleSubmit, changeFunc })=>
+const AccountPresenter=({ join, error, errorCode=0, loading, handleKeyUp, handleSubmit, changeFunc })=>
     <AccountContainer>
         <>
-            {login===true ?
-                <Form login={login} onSubmit={handleSubmit}>
+            { 
+                window.addEventListener("keyup", handleKeyUp)
+            },
+            {join!==true ?
+                <Form className="loginForm" join={join} errorCode={errorCode} onSubmit={handleSubmit}>
                     <header>로그인하기</header>
-                    <label for="type">유형</label>
+                    <label htmlFor="type">유형</label>
                     <select>
                         <option>고객</option>
                         <option>영업주 계정</option>
                         <option>관리자 계정</option>
                     </select>
-                    <label for="email" type="email">이메일 / 유저이름</label>
+                    <label htmlFor="email" type="email">이메일 / 유저이름</label>
                     <input name="email" placeholder="이메일"/>
-                    <label for="password" type="password">비밀번호</label>
+                    <label htmlFor="password" type="password">비밀번호</label>
                     <input name="password" placeholder="패스워드"/>
                     <input type="submit" value="로그인"/>
                     <button onClick={changeFunc}>회원가입하기</button>
+                    <span> { (!error) ? " " : error } </span>
                 </Form> :
-                <Form login={login} onSubmit={handleSubmit}>
+                <Form className="joinForm" join={join} errorCode={errorCode}     onSubmit={handleSubmit} >
                     <header>회원가입</header>
-                    <label for="type">유형</label>
+                    <label htmlFor="type">유형</label>
                     <select>
                         <option>고객</option>
                         <option>영업주 계정</option>
                         <option>관리자 계정</option>
                     </select>
-                    <label for="email">이메일</label>
+                    <label htmlFor="email">이메일</label>
                     <input name="email" placeholder="이메일" type="email"/>
 
-                    <label for="username">유저이름</label>
+                    <label htmlFor="username">유저이름</label>
                     <input name="username" placeholder="유저이름" type="text"/>
 
-                    <label for="password">비밀번호</label>
+                    <label htmlFor="password">비밀번호</label>
                     <input name="password" placeholder="패스워드" type="password"/>
                     <input name="password2" placeholder="패스워드 확인" type="password"/>
                     <input type="submit" value="생성"/>
                     <button onClick={changeFunc}>로그인하기</button>
+                    <span> { (!error) ? " " : error } </span>
                 </Form>
             }
         </>
     </AccountContainer>;
 
 AccountPresenter.propTypes={
-    login:PropTypes.bool,
+    join:PropTypes.bool,
     error:PropTypes.string,
     loading:PropTypes.bool.isRequired,
-    
-    handleSubmit: PropTypes.func.isRequired,
+    handleKeyUp: PropTypes.func,
+    handleSubmit: PropTypes.func,
+    changeFunc: PropTypes.func,
 };
-
 export default AccountPresenter;

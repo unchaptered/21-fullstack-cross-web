@@ -33,7 +33,7 @@ export default withRouter (({ location: { pathname } })=>(
         <div>
             <ALink current={pathname==="/profile" ? "/profile" : null} to="/profile">마이페이지</ALink>
             <ALink current={pathname==="/wallet" ? "/wallet" : null} to="/wallet">마이월렛</ALink>
-            <ALink current={pathname==="/products" ? "/products" : null} to="/products">상품</ALink>
+            <ALink current={pathname==="/shops" ? "/shops" : null} to="/shops">상품</ALink>
             <ALink current={pathname==="/account" ? "/account" : null} to="/account">로그인</ALink>
         </div>
         <div>
