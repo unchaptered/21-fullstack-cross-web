@@ -36,6 +36,7 @@ const initialStyles=createGlobalStyle`
         padding-top: 50px;
         width: 100%;
         height: calc(100vh - 50px);
+        overflow: hidden;
     }
     svg {
         width: 20px;
